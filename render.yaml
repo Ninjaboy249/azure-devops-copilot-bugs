@@ -1,0 +1,13 @@
+services:
+  - type: web
+    name: azure-devops-bug-tracker
+    runtime: python
+    region: oregon
+    plan: free
+    buildCommand: "cd webapp && pip install -r requirements-prod.txt"
+    startCommand: "cd webapp && gunicorn app:app --bind 0.0.0.0:$PORT --workers 2 --timeout 120"
+    envVars:
+      - key: FLASK_SECRET_KEY
+        generateValue: true
+      - key: PYTHON_VERSION
+        value: 3.11.9
