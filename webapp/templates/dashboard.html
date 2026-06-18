@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure DevOps Bug Tracker - Dashboard</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-brand">
+            <span class="nav-icon">🐛</span>
+            <span>Azure DevOps Bug Tracker</span>
+        </div>
+        <div class="nav-info">
+            <span class="project-badge">📁 {{ project }}</span>
+            <a href="{{ url_for('logout') }}" class="btn btn-sm btn-outline">Logout</a>
+        </div>
+    </nav>
+
+    <div class="dashboard-container">
+        <!-- Prompt Section -->
+        <div class="prompt-section">
+            <h2>What bugs would you like to find?</h2>
+            <div class="prompt-box">
+                <textarea id="promptInput" placeholder="Type your query here... e.g., 'Show all active bugs', 'P1 and P2 bugs', 'My assigned bugs', 'Current sprint bugs'" rows="3"></textarea>
+                <button id="searchBtn" class="btn btn-primary" onclick="submitQuery()">
+                    🔍 Search Bugs
+                </button>
+            </div>
+
+            <!-- Quick Prompts -->
+            <div class="quick-prompts">
+                <span class="quick-label">Quick queries:</span>
+                <button class="chip" onclick="quickQuery('Show all active bugs')">Active Bugs</button>
+                <button class="chip" onclick="quickQuery('Show P1 and P2 bugs')">P1 & P2 Bugs</button>
+                <button class="chip" onclick="quickQuery('Bugs assigned to me')">My Bugs</button>
+                <button class="chip" onclick="quickQuery('Current sprint bugs')">Sprint Bugs</button>
+                <button class="chip" onclick="quickQuery('Show all unassigned bugs')">Unassigned</button>
+                <button class="chip" onclick="quickQuery('Show resolved bugs')">Resolved</button>
+                <button class="chip" onclick="quickQuery('Show all bugs')">All Bugs</button>
+            </div>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div id="loading" class="loading hidden">
+            <div class="spinner"></div>
+            <p>Fetching bugs from Azure DevOps...</p>
+        </div>
+
+        <!-- Results Section -->
+        <div id="results" class="results-section hidden">
+            <!-- Stats Bar -->
+            <div class="results-header">
+                <div class="results-info">
+                    <h3 id="resultsTitle">Results</h3>
+                    <span id="resultsCount" class="count-badge">0 bugs</span>
+                </div>
+                <div class="export-buttons">
+                    <button class="btn btn-success btn-sm" onclick="exportData('csv')">
+                        📄 Export CSV
+                    </button>
+                    <button class="btn btn-success btn-sm" onclick="exportData('excel')">
+                        📊 Export Excel
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Cards -->
+            <div id="statsCards" class="stats-grid"></div>
+
+            <!-- Results Table -->
+            <div class="table-container">
+                <table id="bugsTable">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Title</th>
+                            <th>State</th>
+                            <th>Priority</th>
+                            <th>Severity</th>
+                            <th>Assigned To</th>
+                            <th>Created</th>
+                            <th>Sprint</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bugsTableBody"></tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Error Section -->
+        <div id="error" class="error-section hidden">
+            <div class="error-card">
+                <span class="error-icon">⚠️</span>
+                <p id="errorMessage"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>

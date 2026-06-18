@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Azure DevOps Bug Tracker - Login</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body class="login-page">
+    <div class="login-container">
+        <div class="login-card">
+            <div class="login-header">
+                <div class="logo">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none">
+                        <path d="M22 4L12 8L2 4L12 0L22 4Z" fill="#0078D4"/>
+                        <path d="M22 8L12 12L2 8L12 4L22 8Z" fill="#50A0E6"/>
+                        <path d="M22 12L12 16L2 12L12 8L22 12Z" fill="#0078D4" opacity="0.7"/>
+                    </svg>
+                </div>
+                <h1>Azure DevOps Bug Tracker</h1>
+                <p class="subtitle">Connect to your Azure DevOps organization to query and export bugs</p>
+            </div>
+
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        <div class="alert alert-{{ category }}">{{ message }}</div>
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <form method="POST" action="{{ url_for('login') }}" id="loginForm">
+                <input type="hidden" name="auth_method" value="pat">
+
+                <div class="form-group">
+                    <label for="org_url">Organization URL</label>
+                    <input type="url" id="org_url" name="org_url"
+                           placeholder="https://dev.azure.com/your-organization"
+                           required>
+                    <span class="hint">e.g., https://dev.azure.com/contoso</span>
+                </div>
+
+                <div class="form-group">
+                    <label for="project">Project Name</label>
+                    <input type="text" id="project" name="project"
+                           placeholder="Your project name"
+                           required>
+                </div>
+
+                <div class="form-group">
+                    <label for="pat">Personal Access Token (PAT)</label>
+                    <div class="input-with-toggle">
+                        <input type="password" id="pat" name="pat"
+                               placeholder="Enter your PAT token"
+                               required>
+                        <button type="button" class="toggle-visibility" onclick="togglePAT()">👁️</button>
+                    </div>
+                    <span class="hint">
+                        <a href="https://dev.azure.com/_usersSettings/tokens" target="_blank">Create a PAT</a>
+                        with Work Items (Read) scope
+                    </span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-full">
+                    🔗 Connect to Azure DevOps
+                </button>
+            </form>
+
+            <div class="login-footer">
+                <p>🔒 Your credentials are stored securely in your browser session only.</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function togglePAT() {
+            const input = document.getElementById('pat');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,17 @@
+{
+  "servers": {
+    "azure-devops": {
+      "type": "stdio",
+      "command": "npx",
+      "args": [
+        "-y",
+        "@anthropic/azure-devops-mcp-server"
+      ],
+      "env": {
+        "AZURE_DEVOPS_ORG_URL": "${env:AZURE_DEVOPS_ORG_URL}",
+        "AZURE_DEVOPS_PAT": "${env:AZURE_DEVOPS_PAT}",
+        "AZURE_DEVOPS_PROJECT": "${env:AZURE_DEVOPS_PROJECT}"
+      }
+    }
+  }
+}
